@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Pocket</string>
+
+    <string name="title_section1">Money In</string>
+    <string name="title_section2">Expenses</string>
+    <string name="title_section3">Money Out</string>
+    <string name="title_section4">Report</string>
+
+    <string name="hello_world">Hello world!</string>
+
+    <string name="action_settings">Settings</string>
+</resources>
