@@ -1,22 +1,25 @@
 package com.example.ashok.pocket;
 
-import java.util.Locale;
-
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.ActionBar;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.view.Gravity;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.NotificationCompat;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import java.util.List;
+import java.util.Locale;
+
+import databbase.Category;
 
 public class MainActivity extends AppCompatActivity implements ActionBar.TabListener {
 
@@ -28,8 +31,9 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
      * may be best to switch to a
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
+    NotificationCompat.Builder mBuilder;
     SectionsPagerAdapter mSectionsPagerAdapter;
-
+//grandy binod bijuche
     /**
      * The {@link ViewPager} that will host the section contents.
      */
@@ -39,10 +43,24 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+       mBuilder = new NotificationCompat.Builder(MainActivity.this);
 
         // Set up the action bar.
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
+//
+//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.set_array));
+//        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+//        ActionBar.OnNavigationListener navigationListener = new android.support.v7.app.ActionBar.OnNavigationListener() {
+//
+//            @Override
+//            public boolean onNavigationItemSelected(int itemPosition, long itemId) {
+//                Toast.makeText(getBaseContext(), "You selected : "   , Toast.LENGTH_SHORT).show();
+//                return false;
+//            }
+//        };
+//        actionBar.setListNavigationCallbacks(adapter, navigationListener);
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -74,6 +92,9 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                             .setText(mSectionsPagerAdapter.getPageTitle(i))
                             .setTabListener(this));
         }
+
+
+
     }
 
 
@@ -81,6 +102,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
         return true;
     }
 
@@ -93,6 +115,12 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            System.out.println("setting btn clicked");
+            Category restaurants = new Category();
+            restaurants.remoteId = 2;
+            restaurants.name = "Hotels";
+            restaurants.save();
+            System.out.println("Saved everything.................");
             return true;
         }
 
@@ -128,6 +156,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
+            System.out.println("tab changed........................");
             return PlaceholderFragment.newInstance(position + 1);
         }
 
@@ -185,9 +214,21 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
           int i=  getArguments().getInt(ARG_SECTION_NUMBER);
             TextView tv=(TextView)rootView.findViewById(R.id.section_label);
-            tv.setText(String.valueOf(i));
+            String s="";
+            if (i==2){
+                List<Category> c=Category.getAll();
+                for(Category p:c){
+                    s=s+p.getId()+"  ";
+                }
+                tv.setText(s);
+
+            }else {
+                tv.setText(String.valueOf(i));
+            }
             return rootView;
         }
     }
+
+
 
 }
